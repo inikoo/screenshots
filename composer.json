@@ -1,0 +1,7 @@
+{
+    "require": {
+        "nesk/puphpeteer": "^1.6",
+        "slim/slim": "^4.0",
+        "slim/psr7": "^0.6.0"
+    }
+}
