@@ -48,8 +48,8 @@ $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 $validate_url = function (Request $request, RequestHandler $handler) {
 
 
+
     $params   = $request->getQueryParams();
-    $response = $handler->handle($request);
 
     if (empty($params['url'])) {
         throw new RuntimeException('GET URL Parameter url needed. e.g. ?url=https://www.example.com');
@@ -58,6 +58,8 @@ $validate_url = function (Request $request, RequestHandler $handler) {
     if (filter_var($params['url'], FILTER_VALIDATE_URL) == false) {
         throw new RuntimeException('Invalid url, provide a valid RFC 2396 URL. e.g. ?url=https://www.example.com');
     }
+
+    $response = $handler->handle($request);
 
     return $response;
 
@@ -68,6 +70,7 @@ $app->add(
     new Tuupola\Middleware\JwtAuthentication(
         [
             "secret" => SCREENSHOTS_KEY,
+            "secure"=>false,
             "error"  => function ($response, $arguments) {
                 $data["status"]  = "error";
                 $data["message"] = $arguments["message"];
@@ -121,9 +124,9 @@ $app->get(
 
     $image = @file_get_contents($resized_image_filename);
     if ($image === false) {
-        $handler = $this->notFoundHandler;
 
-        return $handler($request, $response);
+        throw new RuntimeException('missing image');
+
     }
 
 
