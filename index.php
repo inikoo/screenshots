@@ -16,7 +16,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Factory\AppFactory;
 
+// SCREENSHOTS_KEY is defined in this file
 require 'keyring/screenshots.dns.php';
+
 require 'vendor/autoload.php';
 require 'screenshot_functions.php';
 
@@ -66,7 +68,6 @@ $app->add(
     new Tuupola\Middleware\JwtAuthentication(
         [
             "secret" => SCREENSHOTS_KEY,
-            "secure" => false,
             "error"  => function ($response, $arguments) {
                 $data["status"]  = "error";
                 $data["message"] = $arguments["message"];
